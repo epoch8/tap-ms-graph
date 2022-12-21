@@ -10,7 +10,16 @@
     "displayName": {
       "type": ["string", "null"]
     },
+    "accountEnabled": {
+      "type": ["boolean", "null"]
+    },
     "givenName": {
+      "type": ["string", "null"]
+    },
+    "createdDateTime": {
+      "type": ["string", "null"]
+    },
+    "deletedDateTime": {
       "type": ["string", "null"]
     },
     "jobTitle": {
@@ -18,6 +27,12 @@
     },
     "mail": {
       "type": ["string", "null"]
+    },
+    "otherMails": {
+      "type": "array",
+      "items":{
+        "type": "string"
+      }
     },
     "mobilePhone": {
       "type": ["string", "null"]
