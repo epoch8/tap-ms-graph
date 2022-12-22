@@ -2,6 +2,7 @@
 
 from tap_ms_graph.client import MSGraphStream
 import hashlib
+from urllib.parse import urlparse
 
 
 def md5(input: str) -> str:
@@ -78,9 +79,14 @@ class UserEventsStream(MSGraphStream):
             return row
         attendees = row.pop("attendees")
         for attendee in attendees:
-            attendee["emailAddress"]["address"] = md5(attendee["emailAddress"]["address"].lower())
+            if attendee["emailAddress"].get("address"):
+                attendee["emailAddress"]["address"] = md5(attendee["emailAddress"]["address"].lower())
+            else:
+                attendee["emailAddress"]["address"] = ""
             attendee["emailAddress"].pop("name")
         row.update({"attendees": attendees})
+        if row.get("onlineMeeting"):
+            row["onlineMeeting"]["joinUrl"] = urlparse(row["onlineMeeting"]["joinUrl"]).hostname
         return row
 
     def validate_response(self, response) -> None:
