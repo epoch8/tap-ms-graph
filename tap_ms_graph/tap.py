@@ -13,7 +13,7 @@ from tap_ms_graph.streams import (
 
 STREAM_TYPES = [
     UsersStream,
-    UserEventsStream,
+    # UserEventsStream,
     UserMessagesStream
 ]
 

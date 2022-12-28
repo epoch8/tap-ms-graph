@@ -230,6 +230,26 @@
                 "null"
             ]
         },
+        "internetEmailId": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "internetMessageHeaders": {
+            "type": "array",
+            "items":{
+                "type": "object",
+                "properties": {
+                    "name":{
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "importance": {
             "type": [
                 "string",

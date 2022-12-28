@@ -1,13 +1,6 @@
 """Stream type classes for tap-ms-graph."""
-
 from tap_ms_graph.client import MSGraphStream
-import hashlib
-from urllib.parse import urlparse
-
-
-def md5(input: str) -> str:
-    return hashlib.md5(input.encode("utf-8")).hexdigest()
-
+from tap_ms_graph.utils import hash_email_in_email_objects_array, filter_message_headers, get_domain_name_from_url_in_row
 
 class SubscribedSkusStream(MSGraphStream):
     name = "subscribedSkus"
@@ -49,6 +42,11 @@ class UserMessagesStream(MSGraphStream):
             return []
         return super().get_records(context)
 
+    def post_process(self, row, context):
+        row = filter_message_headers(row)
+        row = hash_email_in_email_objects_array(row)
+        return row
+
     def validate_response(self, response) -> None:
         if response.status_code == 404:
             self.is_notfound = True
@@ -75,18 +73,8 @@ class UserEventsStream(MSGraphStream):
         return super().get_records(context)
 
     def post_process(self, row, context):
-        if not row.get("attendees"):
-            return row
-        attendees = row.pop("attendees")
-        for attendee in attendees:
-            if attendee["emailAddress"].get("address"):
-                attendee["emailAddress"]["address"] = md5(attendee["emailAddress"]["address"].lower())
-            else:
-                attendee["emailAddress"]["address"] = ""
-            attendee["emailAddress"].pop("name")
-        row.update({"attendees": attendees})
-        if row.get("onlineMeeting"):
-            row["onlineMeeting"]["joinUrl"] = urlparse(row["onlineMeeting"]["joinUrl"]).hostname
+        row = hash_email_in_email_objects_array(row)
+        row = get_domain_name_from_url_in_row(row)
         return row
 
     def validate_response(self, response) -> None:
