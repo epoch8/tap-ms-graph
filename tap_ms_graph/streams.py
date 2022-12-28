@@ -1,6 +1,5 @@
 """Stream type classes for tap-ms-graph."""
 from tap_ms_graph.client import MSGraphStream
-from tap_ms_graph.utils import filter_message_headers, get_domain_name_from_url_in_row
 
 class SubscribedSkusStream(MSGraphStream):
     name = "subscribedSkus"

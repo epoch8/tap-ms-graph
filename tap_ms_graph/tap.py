@@ -13,7 +13,7 @@ from tap_ms_graph.streams import (
 
 STREAM_TYPES = [
     UsersStream,
-    # UserEventsStream,
+    UserEventsStream,
     UserMessagesStream
 ]
 
@@ -94,6 +94,13 @@ class TapMSGraph(Tap):
             th.StringType,
             description='Override the Graph API service base URL. Required if using a national cloud.'
         ),
+        th.Property(
+            'hash_email',
+            th.BooleanType,
+            default=False,
+            description="Emails hashed in output if enabled"
+        ),
+
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:

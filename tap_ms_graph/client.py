@@ -4,7 +4,7 @@ from typing import Any, Callable, Generator, Iterable, Union, Optional, Dict
 from singer_sdk.streams import RESTStream
 from tap_ms_graph.auth import MSGraphAuthenticator
 from tap_ms_graph.pagination import MSGraphPaginator
-from tap_ms_graph.utils import hash_email_in_email_objects_array, filter_message_headers, get_domain_name_from_url_in_row
+from tap_ms_graph.utils import hash_email_in_email_objects_array, filter_message_headers, get_domain_name_from_url_in_row, hash_email_in_email_objects
 from memoization import cached
 from urllib.parse import urljoin
 from pathlib import Path
@@ -111,6 +111,7 @@ class MSGraphStream(RESTStream):
     def post_process(self, row, context):
         row = filter_message_headers(row)
         row = get_domain_name_from_url_in_row(row)
+        row = hash_email_in_email_objects(row)
         row = hash_email_in_email_objects_array(row) if self.hash_email else row
         return row
 
