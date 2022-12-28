@@ -4,6 +4,7 @@ from typing import Any, Callable, Generator, Iterable, Union, Optional, Dict
 from singer_sdk.streams import RESTStream
 from tap_ms_graph.auth import MSGraphAuthenticator
 from tap_ms_graph.pagination import MSGraphPaginator
+from tap_ms_graph.utils import hash_email_in_email_objects_array, filter_message_headers, get_domain_name_from_url_in_row
 from memoization import cached
 from urllib.parse import urljoin
 from pathlib import Path
@@ -22,6 +23,10 @@ class MSGraphStream(RESTStream):
     records_jsonpath = '$.value[*]'
     record_child_context = 'id'
     schema_filename:str = None   # configure per stream
+
+    @property
+    def hash_email(self):
+        return self.config.get("hash_email")
 
     @property
     def api_version(self) -> str:
@@ -102,6 +107,12 @@ class MSGraphStream(RESTStream):
         self.logger.info(f'INFO response: {log_text}')
 
         return super().parse_response(response)
+
+    def post_process(self, row, context):
+        row = filter_message_headers(row)
+        row = get_domain_name_from_url_in_row(row)
+        row = hash_email_in_email_objects_array(row) if self.hash_email else row
+        return row
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         if self.record_child_context:
