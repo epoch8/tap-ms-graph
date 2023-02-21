@@ -72,11 +72,12 @@ class TapMSGraph(Tap):
             ),
             description='Custom configuration for streams.'
         ),
-#        th.Property(
-#            'start_date',
-#            th.DateTimeType,
-#            description='The earliest record date to sync'
-#        ),
+       th.Property(
+           'start_date',
+           th.DateTimeType,
+           required=True,
+           description='The earliest record date to sync'
+       ),
         th.Property(
             'api_version',
             th.StringType,

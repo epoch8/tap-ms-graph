@@ -71,17 +71,26 @@ class MSGraphStream(RESTStream):
 
     def get_new_paginator(self) -> MSGraphPaginator:
         return MSGraphPaginator()
-
+    
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
-        stream_config = self.config.get('stream_config')
-        
-        if stream_config:
-            params = [c.get('params') for c in stream_config if c.get('stream') == self.name]
-            
-            if params:
-                return {p.get('param'):p.get('value') for p in params[-1]}
+        params = {}
+        stream_config = self.config.get('stream_config', [])
+        users_params = [c.get('params') for c in stream_config if c.get('stream') == self.name]     
+        if users_params:
+            params.update({p.get('param'):p.get('value') for p in users_params[-1]})
+        if not self.replication_key:
+            return params   
+        starting_date = self.get_starting_replication_key_value(context) or self.config.get('start_date')
+        if starting_date:
+            if params.get("$filter"):
+                params["$filter"] = params["$filter"] + f" and {self.replication_key} ge {starting_date}"
+            else:
+                params["$filter"] = f"{self.replication_key} ge {starting_date}"
+            params["$orderby"] = self.replication_key
+        self.logger.info("QUERY PARAMS: %s", params)
+        return params
 
     def prepare_request(
         self, context: Union[dict, None], next_page_token: Union[Any, None]

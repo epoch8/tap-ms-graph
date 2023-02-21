@@ -28,7 +28,8 @@ class UserMessagesStream(MSGraphStream):
     parent_stream_type = UsersStream
     path = "/users/{user_id}/messages"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "lastModifiedDateTime"
+    is_sorted = True
     schema_filename = "user_messages.json"
 
     def __init__(self, *args, **kwargs):
@@ -54,7 +55,8 @@ class UserEventsStream(MSGraphStream):
     parent_stream_type = UsersStream
     path = "/users/{user_id}/events"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "lastModifiedDateTime"
+    is_sorted = True
     schema_filename = "user_events.json"
 
     def __init__(self, *args, **kwargs):
