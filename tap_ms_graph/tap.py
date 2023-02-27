@@ -101,6 +101,18 @@ class TapMSGraph(Tap):
             default=False,
             description="Emails hashed in output if enabled"
         ),
+        th.Property(
+            'encrypt_email',
+            th.BooleanType,
+            default=False,
+            description="Emails encrypted in output if enabled"
+        ),
+        th.Property(
+            'public_key_path',
+            th.StringType,
+            default="./public_key",
+            description="Emails encrypted in output if enabled"
+        ),
 
     ).to_dict()
 

@@ -2,9 +2,10 @@
 
 from typing import Any, Callable, Generator, Iterable, Union, Optional, Dict
 from singer_sdk.streams import RESTStream
+from singer_sdk.exceptions import ConfigValidationError
 from tap_ms_graph.auth import MSGraphAuthenticator
 from tap_ms_graph.pagination import MSGraphPaginator
-from tap_ms_graph.utils import hash_email_in_email_objects_array, filter_message_headers, get_domain_name_from_url_in_row, hash_email_in_email_objects
+from tap_ms_graph.utils import MSGraphUtils
 from memoization import cached
 from urllib.parse import urljoin
 from pathlib import Path
@@ -27,6 +28,14 @@ class MSGraphStream(RESTStream):
     @property
     def hash_email(self):
         return self.config.get("hash_email")
+    
+    @property
+    def encrypt_email(self):
+        encrypt_email = self.config.get("encrypt_email")
+        if encrypt_email and not self.config.get("public_key_path"):
+            raise ConfigValidationError("Path to the file with the public key must be specified")
+        self.public_key_path = self.config.get("public_key_path")
+        return encrypt_email
 
     @property
     def api_version(self) -> str:
@@ -47,6 +56,11 @@ class MSGraphStream(RESTStream):
     def authenticator(self) -> MSGraphAuthenticator:
         return MSGraphAuthenticator(self)
 
+    @property
+    @cached
+    def utils(self) -> MSGraphUtils:
+        return MSGraphUtils(self)
+    
     @property
     def http_headers(self) -> dict:
         headers = {}
@@ -118,10 +132,9 @@ class MSGraphStream(RESTStream):
         return super().parse_response(response)
 
     def post_process(self, row, context):
-        row = filter_message_headers(row)
-        row = get_domain_name_from_url_in_row(row)
-        row = hash_email_in_email_objects(row)
-        row = hash_email_in_email_objects_array(row) if self.hash_email else row
+        row = self.utils.filter_message_headers(row)
+        row = self.utils.get_domain_name_from_url_in_row(row)
+        row = self.utils.hash_email_in_row(row) if self.hash_email else row
         return row
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
