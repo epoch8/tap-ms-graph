@@ -5,7 +5,8 @@
 
 .meltano/
 dev_meltano.yml
-
+public_key
+secret_key
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

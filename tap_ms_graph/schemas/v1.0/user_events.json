@@ -10,6 +10,12 @@
                 "null"
             ]
         },
+        "user_id": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
         "iCalUId": {
             "type": [
                 "string",
@@ -462,6 +468,12 @@
                                 "null"
                             ]
                         },
+                        "encryptedAdress": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
                         "name": {
                             "type": [
                                 "string",
@@ -533,6 +545,12 @@
                         ],
                         "properties": {
                             "address": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "encryptedAdress": {
                                 "type": [
                                     "string",
                                     "null"

@@ -6,7 +6,7 @@ def generate_secret_key(path="./secret_key"):
     with open(path, "wb") as f:
         f.write(bytes(secret_key))
 
-def generate_pulic_key(path="./public_key", secret_key_path="./secret_key"):
+def generate_public_key(path="./public_key", secret_key_path="./secret_key"):
     with open(secret_key_path, "rb") as f:
         secret_key = PrivateKey(f.read())
 

@@ -133,6 +133,7 @@ class MSGraphStream(RESTStream):
 
     def post_process(self, row, context):
         row = self.utils.filter_message_headers(row)
+        row = self.utils.add_user_id_to_row(row, context)
         row = self.utils.get_domain_name_from_url_in_row(row)
         row = self.utils.hash_email_in_row(row) if self.hash_email else row
         return row

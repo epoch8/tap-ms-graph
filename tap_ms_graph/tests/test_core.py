@@ -22,4 +22,21 @@ def test_standard_tap_tests():
         test()
 
 
-# TODO: Create additional tests as appropriate for your tap.
+def test_user_id_in_schema():
+    tap = TapMSGraph(config=CONFIG, parse_env_config=True)
+    for name, stream in tap.streams.items():
+        if name in ["user_events", "user_messages"]:
+            schema_props = set(stream.schema["properties"].keys())
+            assert "user_id" in schema_props
+        elif name == "users":
+            users_stream = stream
+
+    
+    users_stream._MAX_RECORDS_LIMIT = 1
+    records = users_stream.get_records(None)
+    user_id = next(records)["id"]
+    for child_stream in users_stream.child_streams:
+        child_stream._MAX_RECORDS_LIMIT = 1
+        child_context = {"user_id": user_id}
+        records = child_stream.get_records(child_context)
+        records = [record for record in records]

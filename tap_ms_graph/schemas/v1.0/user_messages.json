@@ -4,6 +4,12 @@
         "null"
     ],
     "properties": {
+        "user_id": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
         "bccRecipients": {
             "type": "array",
             "items": {
@@ -18,6 +24,12 @@
                         ],
                         "properties": {
                             "address": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "encryptedAdress": {
                                 "type": [
                                     "string",
                                     "null"
@@ -83,6 +95,12 @@
                         ],
                         "properties": {
                             "address": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "encryptedAdress": {
                                 "type": [
                                     "string",
                                     "null"
@@ -211,6 +229,12 @@
                                 "null"
                             ]
                         },
+                        "encryptedAdress": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
                         "name": {
                             "type": [
                                 "string",
@@ -326,6 +350,12 @@
                                     "null"
                                 ]
                             },
+                            "encryptedAdress": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
                             "name": {
                                 "type": [
                                     "string",
@@ -349,6 +379,12 @@
                     ],
                     "properties": {
                         "address": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "encryptedAdress": {
                             "type": [
                                 "string",
                                 "null"
@@ -390,6 +426,12 @@
                         ],
                         "properties": {
                             "address": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "encryptedAdress": {
                                 "type": [
                                     "string",
                                     "null"

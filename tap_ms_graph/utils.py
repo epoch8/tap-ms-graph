@@ -10,6 +10,12 @@ class MSGraphUtils:
     def __init__(self, stream: RESTStreamBase) -> None:
         self.stream = stream
 
+
+    def add_user_id_to_row(self, row, context):
+        if context and context.get("user_id"):
+            row["user_id"] = context.get("user_id")
+        return row
+
     def hash_email_in_row(self, row):
         for email_object_name in EMAIL_FIELDS:
             if row.get(email_object_name):
